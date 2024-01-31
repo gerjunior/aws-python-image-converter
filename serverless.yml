@@ -1,4 +1,4 @@
-service: aws-python-http-api-project
+service: aws-python-image-converter
 frameworkVersion: '3'
 
 provider:
