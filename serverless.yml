@@ -6,11 +6,22 @@ provider:
   runtime: python3.9
 
 functions:
-  hello:
-    handler: handler.hello
+  get_upload_url:
+    handler: functions/handlers/upload.handler
+    environment:
+      BUCKET: geraldostestbucket3131
     events:
       - httpApi:
-          path: /
+          path: /upload_url
           method: get
+  download:
+    handler: functions/handlers/download.handler
+    environment:
+      BUCKET: geraldostestbucket3131
+    events:
+      - httpApi:
+          path: /{file_name}
+          method: get
+
 plugins:
   - serverless-offline
