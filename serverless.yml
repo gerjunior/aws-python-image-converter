@@ -9,19 +9,41 @@ functions:
   get_upload_url:
     handler: functions/handlers/upload.handler
     environment:
-      BUCKET: geraldostestbucket3131
+      BUCKET: !Ref Bucket
     events:
       - httpApi:
           path: /upload_url
           method: get
+
   download:
     handler: functions/handlers/download.handler
     environment:
-      BUCKET: geraldostestbucket3131
+      BUCKET: !Ref Bucket
     events:
       - httpApi:
           path: /{file_name}
           method: get
 
+  convert:
+    handler: functions/handlers/convert.handler
+    events:
+      - s3:
+          bucket: !Ref Bucket
+          event: s3:ObjectCreated:*
+          existing: true
+
 plugins:
   - serverless-offline
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    dockerizePip: non-linux
+
+resources:
+  Resources:
+    Bucket:
+      Type: AWS::S3::Bucket
+      DeletionPolicy: Delete
+      Properties:
+        AccessControl: Private
